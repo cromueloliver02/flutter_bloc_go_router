@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../blocs/blocs.dart';
+import '../widgets/widgets.dart';
+import 'pages.dart';
 
 class ProductsPage extends StatelessWidget {
   const ProductsPage({super.key});
@@ -9,8 +11,10 @@ class ProductsPage extends StatelessWidget {
   static const String name = 'product';
   static const String path = name;
 
+  static final SubmitProductBloc _submitProductBloc = SubmitProductBloc();
   static final List<BlocProvider> blocProviders = [
-    BlocProvider<SubmitProductBloc>(create: (ctx) => SubmitProductBloc()),
+    ...HomePage.blocProviders,
+    BlocProvider<SubmitProductBloc>.value(value: _submitProductBloc),
   ];
 
   @override
@@ -23,9 +27,38 @@ class ProductsPage extends StatelessWidget {
     debugPrint('PRODUCTS - SubmitProductBloc $submitProductBloc');
 
     return Scaffold(
-      appBar: AppBar(),
-      body: const Center(
-        child: Text('PRODUCTS PAGE'),
+      appBar: AppBar(title: const Text('PRODUCTS PAGE')),
+      body: Center(
+        child: Column(
+          children: [
+            Expanded(
+              child: BlocBuilder<ProductListBloc, ProductListState>(
+                buildWhen: (prev, curr) => prev.status != curr.status,
+                builder: (ctx, state) {
+                  if (state.status == ProductListStatus.initial) {
+                    return const SizedBox.shrink();
+                  }
+
+                  if (state.status == ProductListStatus.loading) {
+                    return const Center(child: CircularProgressIndicator());
+                  }
+
+                  if (state.status == ProductListStatus.failure) {
+                    return const Center(
+                      child: Text('Something went wrong'),
+                    );
+                  }
+
+                  if (state.productList.isEmpty) {
+                    return const Center(child: Text('No Products to Show'));
+                  }
+
+                  return ProductList(products: state.productList);
+                },
+              ),
+            )
+          ],
+        ),
       ),
     );
   }

@@ -19,10 +19,7 @@ class AppRouter {
             path: ProductsPage.path,
             name: ProductsPage.name,
             builder: (ctx, state) => MultiBlocProvider(
-              providers: [
-                ...HomePage.blocProviders,
-                ...ProductsPage.blocProviders,
-              ],
+              providers: ProductsPage.blocProviders,
               child: const ProductsPage(),
             ),
           ),

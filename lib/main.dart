@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import 'configs/app_dependencies.dart' as di;
 import 'configs/configs.dart';
 
 void main() {
+  di.init();
+
   runApp(const MyApp());
 }
 
