@@ -95,4 +95,10 @@ class _HomePageState extends State<HomePage> {
     super.initState();
     context.read<ProductListBloc>().add(ProductListStarted());
   }
+
+  @override
+  void dispose() {
+    sl.resetLazySingleton(instance: sl<ProductListBloc>());
+    super.dispose();
+  }
 }
