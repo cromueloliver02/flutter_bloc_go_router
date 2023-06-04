@@ -5,7 +5,7 @@ import '../blocs/blocs.dart';
 import '../widgets/widgets.dart';
 import 'pages.dart';
 
-class ProductsPage extends StatelessWidget {
+class ProductsPage extends StatefulWidget {
   const ProductsPage({super.key});
 
   static const String name = 'product';
@@ -17,6 +17,11 @@ class ProductsPage extends StatelessWidget {
     BlocProvider<SubmitProductBloc>.value(value: _submitProductBloc),
   ];
 
+  @override
+  State<ProductsPage> createState() => _ProductsPageState();
+}
+
+class _ProductsPageState extends State<ProductsPage> {
   @override
   Widget build(BuildContext context) {
     final ProductListBloc productListBloc = context.read<ProductListBloc>();
@@ -61,5 +66,11 @@ class ProductsPage extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  @override
+  void deactivate() {
+    context.read<SubmitProductBloc>().add(SubmitProductResetRequested());
+    super.deactivate();
   }
 }

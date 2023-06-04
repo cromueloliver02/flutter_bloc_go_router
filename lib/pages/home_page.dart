@@ -35,7 +35,15 @@ class _HomePageState extends State<HomePage> {
     debugPrint('HOME - ProductListBloc $productListBloc');
 
     return Scaffold(
-      appBar: AppBar(title: const Text('HOME PAGE')),
+      appBar: AppBar(
+        title: const Text('HOME PAGE'),
+        actions: [
+          IconButton(
+            onPressed: () => context.goNamed(LoginPage.name),
+            icon: const Icon(Icons.logout),
+          ),
+        ],
+      ),
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(20),
@@ -86,5 +94,11 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
     context.read<ProductListBloc>().add(ProductListStarted());
+  }
+
+  @override
+  void deactivate() {
+    context.read<ProductListBloc>().add(ProductListResetRequested());
+    super.deactivate();
   }
 }

@@ -5,8 +5,13 @@ import '../pages/pages.dart';
 
 class AppRouter {
   static final GoRouter router = GoRouter(
-    initialLocation: HomePage.path,
+    initialLocation: LoginPage.path,
     routes: [
+      GoRoute(
+        path: LoginPage.path,
+        name: LoginPage.name,
+        builder: (ctx, state) => const LoginPage(),
+      ),
       GoRoute(
         path: HomePage.path,
         name: HomePage.name,

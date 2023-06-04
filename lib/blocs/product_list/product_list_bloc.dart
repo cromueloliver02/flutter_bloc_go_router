@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../repositories/repositories.dart';
@@ -14,6 +15,7 @@ class ProductListBloc extends Bloc<ProductListEvent, ProductListState> {
   })  : _productRepository = productRepository,
         super(ProductListState.initial()) {
     on<ProductListStarted>(_onProductListStarted);
+    on<ProductListResetRequested>(_onProductListResetRequested);
   }
 
   void _onProductListStarted(
@@ -32,5 +34,19 @@ class ProductListBloc extends Bloc<ProductListEvent, ProductListState> {
     } catch (err) {
       emit(state.copyWith(status: () => ProductListStatus.failure));
     }
+  }
+
+  void _onProductListResetRequested(
+    ProductListResetRequested event,
+    Emitter<ProductListState> emit,
+  ) {
+    debugPrint('ProductListBloc resetted...');
+    emit(ProductListState.initial());
+  }
+
+  @override
+  Future<void> close() {
+    debugPrint('ProductListBloc closed...');
+    return super.close();
   }
 }
