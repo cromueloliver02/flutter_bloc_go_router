@@ -17,7 +17,7 @@ void init() {
   sl.registerLazySingleton<AuthRepository>(
     () => AuthRepositoryImpl(prefs: sl<SharedPreferences>()),
   );
-  sl.registerLazySingleton<ProductRepository>(() => ProductRepositoryImpl());
+  sl.registerSingleton<ProductRepository>(ProductRepositoryImpl());
 
   // blocs (singleton)
   sl.registerLazySingleton<ProductListBloc>(
@@ -25,7 +25,6 @@ void init() {
   );
 
   // blocs (factory)
-  // TODO: might register it as singleton instance soon
   sl.registerFactory<AuthBloc>(
     () => AuthBloc(authRepository: sl<AuthRepository>()),
   );
