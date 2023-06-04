@@ -4,7 +4,6 @@ import 'package:go_router/go_router.dart';
 
 import '../blocs/blocs.dart';
 import '../configs/configs.dart';
-import '../repositories/repositories.dart';
 import '../widgets/widgets.dart';
 import 'pages.dart';
 
@@ -14,11 +13,8 @@ class HomePage extends StatefulWidget {
   static const String name = 'home';
   static const String path = '/$name';
 
-  static final ProductListBloc _productListBloc = ProductListBloc(
-    productRepository: sl<ProductRepository>(),
-  );
   static final List<BlocProvider> blocProviders = [
-    BlocProvider<ProductListBloc>.value(value: _productListBloc),
+    BlocProvider<ProductListBloc>(create: (ctx) => sl<ProductListBloc>()),
   ];
 
   @override
@@ -26,6 +22,10 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  void _signOut(BuildContext ctx) {
+    context.read<AuthBloc>().add(AuthSignOutRequested());
+  }
+
   @override
   Widget build(BuildContext context) {
     final AuthBloc authBloc = context.read<AuthBloc>();
@@ -39,7 +39,7 @@ class _HomePageState extends State<HomePage> {
         title: const Text('HOME PAGE'),
         actions: [
           IconButton(
-            onPressed: () => context.goNamed(LoginPage.name),
+            onPressed: () => _signOut(context),
             icon: const Icon(Icons.logout),
           ),
         ],
@@ -94,11 +94,5 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
     context.read<ProductListBloc>().add(ProductListStarted());
-  }
-
-  @override
-  void deactivate() {
-    context.read<ProductListBloc>().add(ProductListResetRequested());
-    super.deactivate();
   }
 }

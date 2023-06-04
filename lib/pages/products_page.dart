@@ -2,26 +2,20 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../blocs/blocs.dart';
+import '../configs/configs.dart';
 import '../widgets/widgets.dart';
-import 'pages.dart';
 
-class ProductsPage extends StatefulWidget {
+class ProductsPage extends StatelessWidget {
   const ProductsPage({super.key});
 
   static const String name = 'product';
   static const String path = name;
 
-  static final SubmitProductBloc _submitProductBloc = SubmitProductBloc();
   static final List<BlocProvider> blocProviders = [
-    ...HomePage.blocProviders,
-    BlocProvider<SubmitProductBloc>.value(value: _submitProductBloc),
+    BlocProvider<ProductListBloc>.value(value: sl<ProductListBloc>()),
+    BlocProvider<SubmitProductBloc>(create: (ctx) => sl<SubmitProductBloc>()),
   ];
 
-  @override
-  State<ProductsPage> createState() => _ProductsPageState();
-}
-
-class _ProductsPageState extends State<ProductsPage> {
   @override
   Widget build(BuildContext context) {
     final ProductListBloc productListBloc = context.read<ProductListBloc>();
@@ -66,11 +60,5 @@ class _ProductsPageState extends State<ProductsPage> {
         ),
       ),
     );
-  }
-
-  @override
-  void deactivate() {
-    context.read<SubmitProductBloc>().add(SubmitProductResetRequested());
-    super.deactivate();
   }
 }

@@ -15,16 +15,28 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MultiBlocProvider(
-      providers: AppBlocs.globalBlocs,
-      child: MaterialApp.router(
-        title: 'FLUTTER BLOC + GO ROUTER',
-        theme: ThemeData(
-          colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-          useMaterial3: true,
-        ),
-        routerConfig: AppRouter.router,
-      ),
+    return FutureBuilder(
+      future: di.sl.allReady(),
+      builder: (BuildContext ctx, AsyncSnapshot snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const SizedBox.shrink();
+        }
+
+        return MultiBlocProvider(
+          providers: AppBlocs.globalBlocs,
+          child: MultiBlocListener(
+            listeners: AppListeners.globalListeners,
+            child: MaterialApp.router(
+              title: 'FLUTTER BLOC + GO ROUTER',
+              theme: ThemeData(
+                colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+                useMaterial3: true,
+              ),
+              routerConfig: AppRouter.router,
+            ),
+          ),
+        );
+      },
     );
   }
 }

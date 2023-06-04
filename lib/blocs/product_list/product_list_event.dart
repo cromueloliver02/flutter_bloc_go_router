@@ -8,5 +8,3 @@ abstract class ProductListEvent extends Equatable {
 }
 
 class ProductListStarted extends ProductListEvent {}
-
-class ProductListResetRequested extends ProductListEvent {}
