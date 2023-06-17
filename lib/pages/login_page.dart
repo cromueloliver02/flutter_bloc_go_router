@@ -15,6 +15,7 @@ class LoginPage extends StatelessWidget {
   static final List<BlocProvider> blocProviders = [
     BlocProvider<UsersBloc>.value(value: sl<UsersBloc>()),
     BlocProvider<SignInCubit>(create: (ctx) => sl<SignInCubit>()),
+    BlocProvider<UserFormCubit>(create: (ctx) => sl<UserFormCubit>()),
   ];
 
   @override

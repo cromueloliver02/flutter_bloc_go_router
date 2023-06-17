@@ -38,10 +38,9 @@ void init() {
   );
   sl.registerFactory<SubmitProductBloc>(() => SubmitProductBloc());
 
-  // cubits (singleton)
+  // cubits (factory)
   sl.registerFactory<SignInCubit>(
     () => SignInCubit(authRepository: sl<AuthRepository>()),
   );
-
-  // cubits (factory)
+  sl.registerFactory<UserFormCubit>(() => UserFormCubit());
 }
