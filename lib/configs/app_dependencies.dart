@@ -34,6 +34,9 @@ void init() {
   sl.registerLazySingleton<ProductListBloc>(
     () => ProductListBloc(productRepository: sl<ProductRepository>()),
   );
+  sl.registerLazySingleton<PostListBloc>(
+    () => PostListBloc(postRepository: sl<PostRepository>()),
+  );
 
   // blocs (factory)
   sl.registerFactory<AuthBloc>(

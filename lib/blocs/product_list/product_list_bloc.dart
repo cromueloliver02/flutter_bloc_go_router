@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -8,6 +10,7 @@ part 'product_list_event.dart';
 part 'product_list_state.dart';
 
 class ProductListBloc extends Bloc<ProductListEvent, ProductListState> {
+  final Completer<void> _loadedCompleter = Completer<void>();
   final ProductRepository _productRepository;
 
   ProductListBloc({
@@ -18,6 +21,8 @@ class ProductListBloc extends Bloc<ProductListEvent, ProductListState> {
 
     debugPrint('ProductListBloc instantiated...');
   }
+
+  Future<void> get loaded => _loadedCompleter.future;
 
   void _onProductListStarted(
     ProductListStarted event,
@@ -32,6 +37,7 @@ class ProductListBloc extends Bloc<ProductListEvent, ProductListState> {
         productList: () => products,
         status: () => ProductListStatus.success,
       ));
+      _loadedCompleter.complete();
     } catch (err) {
       emit(state.copyWith(status: () => ProductListStatus.failure));
     }

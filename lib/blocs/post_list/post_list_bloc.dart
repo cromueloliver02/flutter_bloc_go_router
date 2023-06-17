@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -8,6 +10,7 @@ part 'post_list_event.dart';
 part 'post_list_state.dart';
 
 class PostListBloc extends Bloc<PostListEvent, PostListState> {
+  final Completer<void> _loadedCompleter = Completer<void>();
   final PostRepository _postRepository;
 
   PostListBloc({
@@ -16,6 +19,8 @@ class PostListBloc extends Bloc<PostListEvent, PostListState> {
         super(PostListState.initial()) {
     on<PostListStarted>(_onPostListStarted);
   }
+
+  Future<void> get loaded => _loadedCompleter.future;
 
   void _onPostListStarted(
     PostListStarted event,
@@ -30,6 +35,7 @@ class PostListBloc extends Bloc<PostListEvent, PostListState> {
         postList: () => posts,
         status: () => PostListStatus.success,
       ));
+      _loadedCompleter.complete();
     } catch (err) {
       emit(state.copyWith(status: () => PostListStatus.failure));
     }
