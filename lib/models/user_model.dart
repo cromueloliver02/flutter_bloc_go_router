@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:equatable/equatable.dart';
 
 class User extends Equatable {
-  final String id;
+  final int id;
   final String username;
   final String name;
   final String email;
@@ -23,6 +23,20 @@ class User extends Equatable {
     return 'User(id: $id, username: $username, name: $name, email: $email)';
   }
 
+  User copyWith({
+    int Function()? id,
+    String Function()? username,
+    String Function()? name,
+    String Function()? email,
+  }) {
+    return User(
+      id: id != null ? id() : this.id,
+      username: username != null ? username() : this.username,
+      name: name != null ? name() : this.name,
+      email: email != null ? email() : this.email,
+    );
+  }
+
   Map<String, dynamic> toMap() {
     final result = <String, dynamic>{};
 
@@ -36,7 +50,7 @@ class User extends Equatable {
 
   factory User.fromMap(Map<String, dynamic> map) {
     return User(
-      id: map['id']?.toString() ?? '',
+      id: map['id']?.toInt() ?? 0,
       username: map['username'] ?? '',
       name: map['name'] ?? '',
       email: map['email'] ?? '',

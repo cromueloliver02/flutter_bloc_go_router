@@ -52,7 +52,7 @@ class ProductsPage extends StatelessWidget {
                     return const Center(child: Text('No Products to Show'));
                   }
 
-                  return ProductList(products: state.productList);
+                  return const ProductList();
                 },
               ),
             )

@@ -4,6 +4,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../configs/configs.dart';
 import '../../repositories/repositories.dart';
 
 part 'product_list_event.dart';
@@ -40,12 +41,14 @@ class ProductListBloc extends Bloc<ProductListEvent, ProductListState> {
       _loadedCompleter.complete();
     } catch (err) {
       emit(state.copyWith(status: () => ProductListStatus.failure));
+      _loadedCompleter.completeError(err);
     }
   }
 
   @override
   Future<void> close() {
     debugPrint('ProductListBloc closed...');
+    sl.resetLazySingleton(instance: this);
     return super.close();
   }
 }

@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../configs/configs.dart';
 import '../../models/models.dart';
 import '../../repositories/repositories.dart';
 
@@ -38,6 +39,13 @@ class PostListBloc extends Bloc<PostListEvent, PostListState> {
       _loadedCompleter.complete();
     } catch (err) {
       emit(state.copyWith(status: () => PostListStatus.failure));
+      _loadedCompleter.completeError(err);
     }
+  }
+
+  @override
+  Future<void> close() {
+    sl.resetLazySingleton(instance: this);
+    return super.close();
   }
 }

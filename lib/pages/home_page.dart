@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 
 import '../blocs/blocs.dart';
 import '../configs/configs.dart';
+import '../widgets/widgets.dart';
 import 'pages.dart';
 
 class HomePage extends StatefulWidget {
@@ -47,7 +48,7 @@ class _HomePageState extends State<HomePage> {
             ),
           ],
         ),
-        body: SafeArea(
+        body: SingleChildScrollView(
           child: Padding(
             padding: const EdgeInsets.all(20),
             child: Center(
@@ -70,53 +71,35 @@ class _HomePageState extends State<HomePage> {
                     child: const Text('Go To Products'),
                   ),
                   const SizedBox(height: 20),
-                  // Expanded(
-                  //   child: BlocBuilder<ProductListBloc, ProductListState>(
-                  //     buildWhen: (prev, curr) => prev.status != curr.status,
-                  //     builder: (ctx, state) {
-                  //       if (state.status == ProductListStatus.initial) {
-                  //         return const SizedBox.shrink();
-                  //       }
+                  FutureBuilder(
+                    future: Future.wait([
+                      context.read<ProductListBloc>().loaded,
+                      context.read<PostListBloc>().loaded,
+                    ]),
+                    builder: (BuildContext ctx, AsyncSnapshot snapshot) {
+                      final bool loading =
+                          snapshot.connectionState == ConnectionState.waiting;
 
-                  //       if (state.status == ProductListStatus.loading) {
-                  //         return const Center(
-                  //             child: CircularProgressIndicator());
-                  //       }
+                      if (loading) {
+                        return const Center(
+                          child: CircularProgressIndicator(),
+                        );
+                      }
 
-                  //       if (state.status == ProductListStatus.failure) {
-                  //         return const Center(
-                  //           child: Text('Something went wrong'),
-                  //         );
-                  //       }
+                      if (snapshot.hasError) {
+                        return const Center(
+                          child: Text('Something went wrong'),
+                        );
+                      }
 
-                  //       if (state.productList.isEmpty) {
-                  //         return const Center(
-                  //             child: Text('No Products to Show'));
-                  //       }
-
-                  //       return ProductList(products: state.productList);
-                  //     },
-                  //   ),
-                  // ),
-                  Expanded(
-                    child: FutureBuilder(
-                      future: Future.wait([
-                        context.read<ProductListBloc>().loaded,
-                        context.read<PostListBloc>().loaded,
-                      ]),
-                      builder: (BuildContext ctx, AsyncSnapshot snapshot) {
-                        final bool loading =
-                            snapshot.connectionState == ConnectionState.waiting;
-                        if (loading) {
-                          return const Center(
-                            child: CircularProgressIndicator(),
-                          );
-                        }
-
-                        // return ProductList(products: state.productList);
-                        return const Text('TEST');
-                      },
-                    ),
+                      return const Column(
+                        children: [
+                          ProductList(),
+                          SizedBox(height: 30),
+                          PostList(),
+                        ],
+                      );
+                    },
                   ),
                 ],
               ),
@@ -130,14 +113,9 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-    context.read<ProductListBloc>().add(ProductListStarted());
-    // context.read<PostListBloc>().add(PostListStarted(userId: ));
-  }
+    final int userId = context.read<AuthBloc>().state.user!.id;
 
-  @override
-  void dispose() {
-    // TODO: refactor
-    sl.resetLazySingleton(instance: sl<ProductListBloc>());
-    super.dispose();
+    context.read<ProductListBloc>().add(ProductListStarted());
+    context.read<PostListBloc>().add(PostListStarted(userId: userId));
   }
 }
