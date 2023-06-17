@@ -35,9 +35,15 @@ class LoginPage extends StatelessWidget {
                 children: [
                   const UsersDropdown(),
                   const SizedBox(height: 20),
-                  ElevatedButton(
-                    onPressed: () => context.read<SignInCubit>().signIn(),
-                    child: const Text('Login'),
+                  BlocBuilder<UserFormCubit, UserFormState>(
+                    buildWhen: (prev, curr) =>
+                        prev.selectedUser != curr.selectedUser,
+                    builder: (ctx, state) => ElevatedButton(
+                      onPressed: state.selectedUser != null
+                          ? () => context.read<SignInCubit>().signIn()
+                          : null,
+                      child: const Text('Login'),
+                    ),
                   ),
                 ],
               ),
