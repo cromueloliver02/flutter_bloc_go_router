@@ -23,6 +23,9 @@ void init() {
   sl.registerFactory<UserRepository>(
     () => UserRepositoryImpl(dio: sl<Dio>()),
   );
+  sl.registerFactory<PostRepository>(
+    () => PostRepositoryImpl(dio: sl<Dio>()),
+  );
 
   // blocs (singleton)
   sl.registerLazySingleton<UsersBloc>(
