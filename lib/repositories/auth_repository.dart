@@ -9,7 +9,7 @@ import '../models/models.dart' show User;
 abstract class AuthRepository {
   Stream<User?> get userStateChanges;
 
-  Future<void> signIn();
+  Future<void> signIn(User user);
 
   Future<void> signOut();
 }
@@ -52,15 +52,8 @@ class AuthRepositoryImpl implements AuthRepository {
   }
 
   @override
-  Future<void> signIn() async {
+  Future<void> signIn(User user) async {
     try {
-      const User user = User(
-        id: '001',
-        username: 'chrissy936',
-        name: 'Chris Inglis',
-        email: 'chrissy@gmail.com',
-      );
-
       await _prefs.setString(kAuthUser, user.toJson());
     } catch (err) {
       debugPrint('Error: $err');

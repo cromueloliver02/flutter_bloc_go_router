@@ -40,7 +40,9 @@ class LoginPage extends StatelessWidget {
                         prev.selectedUser != curr.selectedUser,
                     builder: (ctx, state) => ElevatedButton(
                       onPressed: state.selectedUser != null
-                          ? () => context.read<SignInCubit>().signIn()
+                          ? () => ctx
+                              .read<SignInCubit>()
+                              .signIn(state.selectedUser!)
                           : null,
                       child: const Text('Login'),
                     ),
