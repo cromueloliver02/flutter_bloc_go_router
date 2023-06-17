@@ -54,6 +54,17 @@ class _HomePageState extends State<HomePage> {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
+                  BlocBuilder<AuthBloc, AuthState>(
+                    buildWhen: (prev, curr) => prev.user != curr.user,
+                    builder: (ctx, state) {
+                      if (state.status != AuthStatus.authenticated) {
+                        return const SizedBox.shrink();
+                      }
+
+                      return Text('Howdy, ${state.user!.name}');
+                    },
+                  ),
+                  const SizedBox(height: 20),
                   ElevatedButton(
                     onPressed: () => context.goNamed(ProductsPage.name),
                     child: const Text('Go To Products'),
