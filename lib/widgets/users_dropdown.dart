@@ -10,7 +10,7 @@ class UsersDropdown extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<UsersBloc, UsersState>(
+    return BlocBuilder<UserListBloc, UserListState>(
       buildWhen: (prev, curr) => prev.status != curr.status,
       builder: (ctx, state) => DropdownButtonFormField(
         hint: const Text('Select user'),

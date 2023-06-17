@@ -13,7 +13,7 @@ class LoginPage extends StatelessWidget {
   static const String path = name;
 
   static final List<BlocProvider> blocProviders = [
-    BlocProvider<UsersBloc>.value(value: sl<UsersBloc>()),
+    BlocProvider<UserListBloc>.value(value: sl<UserListBloc>()),
     BlocProvider<SignInCubit>(create: (ctx) => sl<SignInCubit>()),
     BlocProvider<UserFormCubit>(create: (ctx) => sl<UserFormCubit>()),
   ];

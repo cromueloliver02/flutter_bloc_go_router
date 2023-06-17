@@ -13,7 +13,7 @@ class SplashPage extends StatefulWidget {
   static const String path = '/$name';
 
   static final List<BlocProvider> blocProviders = [
-    BlocProvider<UsersBloc>.value(value: sl<UsersBloc>()),
+    BlocProvider<UserListBloc>.value(value: sl<UserListBloc>()),
   ];
 
   @override
@@ -22,7 +22,7 @@ class SplashPage extends StatefulWidget {
 
 class _SplashPageState extends State<SplashPage> {
   final List<BlocListener> _listeners = [
-    BlocListener<UsersBloc, UsersState>(
+    BlocListener<UserListBloc, UserListState>(
       listenWhen: (prev, curr) => prev.status != curr.status,
       listener: _usersListener,
     ),
@@ -32,8 +32,8 @@ class _SplashPageState extends State<SplashPage> {
     ),
   ];
 
-  static void _usersListener(BuildContext ctx, UsersState state) {
-    if (state.status != UsersStatus.success) return;
+  static void _usersListener(BuildContext ctx, UserListState state) {
+    if (state.status != UserListStatus.success) return;
 
     ctx.read<AuthBloc>().add(AuthStarted());
   }
@@ -58,6 +58,6 @@ class _SplashPageState extends State<SplashPage> {
   @override
   void initState() {
     super.initState();
-    context.read<UsersBloc>().add(UsersStarted());
+    context.read<UserListBloc>().add(UserListStarted());
   }
 }

@@ -28,8 +28,8 @@ void init() {
   );
 
   // blocs (singleton)
-  sl.registerLazySingleton<UsersBloc>(
-    () => UsersBloc(userRepository: sl<UserRepository>()),
+  sl.registerLazySingleton<UserListBloc>(
+    () => UserListBloc(userRepository: sl<UserRepository>()),
   );
   sl.registerLazySingleton<ProductListBloc>(
     () => ProductListBloc(productRepository: sl<ProductRepository>()),
