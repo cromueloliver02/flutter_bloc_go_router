@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -9,6 +10,7 @@ final GetIt sl = GetIt.instance;
 
 void init() {
   // external depdencies
+  sl.registerFactory<Dio>(() => Dio());
   sl.registerSingletonAsync<SharedPreferences>(
     () => SharedPreferences.getInstance(),
   );
@@ -17,9 +19,15 @@ void init() {
   sl.registerLazySingleton<AuthRepository>(
     () => AuthRepositoryImpl(prefs: sl<SharedPreferences>()),
   );
-  sl.registerSingleton<ProductRepository>(ProductRepositoryImpl());
+  sl.registerFactory<ProductRepository>(() => ProductRepositoryImpl());
+  sl.registerFactory<UserRepository>(
+    () => UserRepositoryImpl(dio: sl<Dio>()),
+  );
 
   // blocs (singleton)
+  sl.registerLazySingleton<UsersBloc>(
+    () => UsersBloc(userRepository: sl<UserRepository>()),
+  );
   sl.registerLazySingleton<ProductListBloc>(
     () => ProductListBloc(productRepository: sl<ProductRepository>()),
   );

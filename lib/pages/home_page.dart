@@ -11,7 +11,7 @@ class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
   static const String name = 'home';
-  static const String path = '/$name';
+  static const String path = name;
 
   static final List<BlocProvider> blocProviders = [
     BlocProvider<ProductListBloc>(create: (ctx) => sl<ProductListBloc>()),
@@ -34,55 +34,61 @@ class _HomePageState extends State<HomePage> {
     final ProductListBloc productListBloc = context.read<ProductListBloc>();
     debugPrint('HOME - ProductListBloc $productListBloc');
 
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('HOME PAGE'),
-        actions: [
-          IconButton(
-            onPressed: () => _signOut(context),
-            icon: const Icon(Icons.logout),
-          ),
-        ],
-      ),
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(20),
-          child: Center(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                ElevatedButton(
-                  onPressed: () => context.goNamed(ProductsPage.name),
-                  child: const Text('Go To Products'),
-                ),
-                const SizedBox(height: 20),
-                Expanded(
-                  child: BlocBuilder<ProductListBloc, ProductListState>(
-                    buildWhen: (prev, curr) => prev.status != curr.status,
-                    builder: (ctx, state) {
-                      if (state.status == ProductListStatus.initial) {
-                        return const SizedBox.shrink();
-                      }
-
-                      if (state.status == ProductListStatus.loading) {
-                        return const Center(child: CircularProgressIndicator());
-                      }
-
-                      if (state.status == ProductListStatus.failure) {
-                        return const Center(
-                          child: Text('Something went wrong'),
-                        );
-                      }
-
-                      if (state.productList.isEmpty) {
-                        return const Center(child: Text('No Products to Show'));
-                      }
-
-                      return ProductList(products: state.productList);
-                    },
+    return WillPopScope(
+      onWillPop: () async => false,
+      child: Scaffold(
+        appBar: AppBar(
+          automaticallyImplyLeading: false,
+          title: const Text('HOME PAGE'),
+          actions: [
+            IconButton(
+              onPressed: () => _signOut(context),
+              icon: const Icon(Icons.logout),
+            ),
+          ],
+        ),
+        body: SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.all(20),
+            child: Center(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  ElevatedButton(
+                    onPressed: () => context.goNamed(ProductsPage.name),
+                    child: const Text('Go To Products'),
                   ),
-                ),
-              ],
+                  const SizedBox(height: 20),
+                  Expanded(
+                    child: BlocBuilder<ProductListBloc, ProductListState>(
+                      buildWhen: (prev, curr) => prev.status != curr.status,
+                      builder: (ctx, state) {
+                        if (state.status == ProductListStatus.initial) {
+                          return const SizedBox.shrink();
+                        }
+
+                        if (state.status == ProductListStatus.loading) {
+                          return const Center(
+                              child: CircularProgressIndicator());
+                        }
+
+                        if (state.status == ProductListStatus.failure) {
+                          return const Center(
+                            child: Text('Something went wrong'),
+                          );
+                        }
+
+                        if (state.productList.isEmpty) {
+                          return const Center(
+                              child: Text('No Products to Show'));
+                        }
+
+                        return ProductList(products: state.productList);
+                      },
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         ),

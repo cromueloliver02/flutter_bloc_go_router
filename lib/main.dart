@@ -24,16 +24,13 @@ class MyApp extends StatelessWidget {
 
         return MultiBlocProvider(
           providers: AppBlocs.globalBlocs,
-          child: MultiBlocListener(
-            listeners: AppListeners.globalListeners,
-            child: MaterialApp.router(
-              title: 'FLUTTER BLOC + GO ROUTER',
-              theme: ThemeData(
-                colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-                useMaterial3: true,
-              ),
-              routerConfig: AppRouter.router,
+          child: MaterialApp.router(
+            title: 'FLUTTER BLOC + GO ROUTER',
+            theme: ThemeData(
+              colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+              useMaterial3: true,
             ),
+            routerConfig: AppRouter.router,
           ),
         );
       },

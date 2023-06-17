@@ -56,8 +56,8 @@ class AuthRepositoryImpl implements AuthRepository {
     try {
       const User user = User(
         id: '001',
-        firstName: 'Chris',
-        lastName: 'Inglis',
+        username: 'chrissy936',
+        name: 'Chris Inglis',
         email: 'chrissy@gmail.com',
       );
 

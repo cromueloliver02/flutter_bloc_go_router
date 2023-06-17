@@ -10,31 +10,36 @@ class AppRouter {
       GoRoute(
         path: SplashPage.path,
         name: SplashPage.name,
-        builder: (ctx, state) => const SplashPage(),
-      ),
-      GoRoute(
-        path: LoginPage.path,
-        name: LoginPage.name,
-        builder: (ctx, state) => MultiBlocProvider(
-          providers: LoginPage.blocProviders,
-          child: const LoginPage(),
-        ),
-      ),
-      GoRoute(
-        path: HomePage.path,
-        name: HomePage.name,
-        builder: (ctx, state) => MultiBlocProvider(
-          providers: HomePage.blocProviders,
-          child: const HomePage(),
+        builder: (ctx, state) => MultiBlocListener(
+          listeners: SplashPage.blocProviders,
+          child: const SplashPage(),
         ),
         routes: [
           GoRoute(
-            path: ProductsPage.path,
-            name: ProductsPage.name,
+            path: LoginPage.path,
+            name: LoginPage.name,
             builder: (ctx, state) => MultiBlocProvider(
-              providers: ProductsPage.blocProviders,
-              child: const ProductsPage(),
+              providers: LoginPage.blocProviders,
+              child: const LoginPage(),
             ),
+          ),
+          GoRoute(
+            path: HomePage.path,
+            name: HomePage.name,
+            builder: (ctx, state) => MultiBlocProvider(
+              providers: HomePage.blocProviders,
+              child: const HomePage(),
+            ),
+            routes: [
+              GoRoute(
+                path: ProductsPage.path,
+                name: ProductsPage.name,
+                builder: (ctx, state) => MultiBlocProvider(
+                  providers: ProductsPage.blocProviders,
+                  child: const ProductsPage(),
+                ),
+              ),
+            ],
           ),
         ],
       ),
